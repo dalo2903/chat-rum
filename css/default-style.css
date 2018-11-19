@@ -31,3 +31,7 @@ body {
   position: fixed;
   bottom: 0;
 }
+#chat-form {
+  padding: 0px;
+  margin-left: 2px;
+}
