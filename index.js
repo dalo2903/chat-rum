@@ -13,11 +13,14 @@ app.get('/',async function(req, res){
 io.on('connection',async function(socket){
   socket.on('chat message',async function(msg){
     const message = {
-      text: msg.text
+      text: msg.text.trim()
     }
     io.emit('chat message', message);
     console.log(message)
-    await MessageController.createMessage(message);
+ 
+    if(message.text != '')
+      MessageController.createMessage(message);
+
   });
   socket.on('init',async function(msg){
     const messages = await MessageController.getAllMessage();
