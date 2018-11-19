@@ -7,7 +7,7 @@ class MessageController {
         return message
     }
     async getAllMessage () {
-        const messages = await Message.find().sort('createdAt').populate({ path: 'author', select: 'name'}).exec()
+        const messages = await Message.find().sort('createdAt').populate({ path: 'author', select: 'name username'}).exec()
         return messages
     }
 }

@@ -10,6 +10,14 @@ const UserSchema = new Schema({
     type: String,
     default: ''
   },
+  username:{
+    type: String,
+    default: ''
+  },
+  // email:{
+  //   type: String,
+  //   default: ''
+  // },
   password: {
     type: String
   },

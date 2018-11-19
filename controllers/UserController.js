@@ -6,15 +6,14 @@ class UserController {
         const user = await User.create(obj)
         return user
     }
-    async getUserByName (name) {
-        const user = await User.findOne({name: name})
-        if(!user){
-            var newUser = {
-                name: name
-            }
-            return await this.createUser(newUser)
-        }
+    async getUserByUserName (username) {
+        const user = await User.findOne({username: username})
         return user
     }
+    async getUserById (_id) {
+        const user = await User.findById(_id)
+        return user
+    }
+
 }
 module.exports = new UserController()

@@ -6,6 +6,7 @@
 body {
   font: 13px Helvetica, Arial;
   background: #efefef;
+  padding-top:120px;
 }
 .header {
     background: white;
