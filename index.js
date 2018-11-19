@@ -28,8 +28,8 @@ app.get("/css/:css", async function(req, res) {
 app.get("/javascript/:js", async function(req, res) {
   res.sendFile(__dirname + "/javascript/" + req.params.js);
 });
-app.get("/images/emoji/:file", async function(req, res) {
-  res.sendFile(__dirname + "/images/emoji/" + req.params.js);
+app.get("/public/images/emoji/:file", async function(req, res) {
+  res.sendFile(__dirname + "/public/images/emoji/" + req.params.file);
 });
 
 app.post("/login", async function(req, res) {

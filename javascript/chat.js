@@ -28,7 +28,7 @@ function getCookie(name) {
   return null;
 }
 $(function() {
-
+  emojify.setConfig({img_dir : 'public/images/emoji'});
   var socket = io();
   if (init === true) {
     socket.emit("init", "init");
