@@ -19,8 +19,8 @@ $(function() {
     var message = {
       text: $("#m").val().trim(),
       username: getCookie('username'),
-      name: unescape(getCookie('name')),
-      userid: unescape(getCookie('userid'))
+      name: decodeURI(getCookie('name')),
+      userid: decodeURI(getCookie('userid'))
     };
     socket.emit("chat message", message);
     $("#m").val("");
@@ -32,7 +32,7 @@ $(function() {
     var date = new Date(message.createdAt)
     message.time = "(" + date.getHours()+":"+ date.getMinutes()+ ")"
 
-    $("#messages").append($("<li>").html("<span id=\"name\">"+unescape(message.author.name) + " ("+message.author.username+ ")"+ "</span>"+"<span id=\"time\"> "+message.time+"</span>:"));
+    $("#messages").append($("<li>").html("<span id=\"name\">"+decodeURI(message.author.name) + " ("+message.author.username+ ")"+ "</span>"+"<span id=\"time\"> "+message.time+"</span>:"));
     $("#messages").append($("<li id=\"text\">").text(message.text))
     window.scrollTo(0, document.body.scrollHeight);
   });

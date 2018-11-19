@@ -99,13 +99,13 @@ io.on("connection", async function(socket) {
     var message = {
       text: msg.text.trim(),
       author:{
-        name:unescape(msg.name.trim()),
+        name:decodeURI(msg.name.trim()),
         username: msg.username.trim(),
       }
     };
     var obj = {
       text: msg.text.trim(),
-      author: unescape(msg.userid.trim())
+      author: decodeURI(msg.userid.trim())
     }
     var createdMessage
     if (message.text != ""){
