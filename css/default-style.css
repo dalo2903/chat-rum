@@ -14,7 +14,9 @@ body {
     top:0;
     border-bottom: 1.5px solid deepskyblue ;
     height: 16%;
-    padding: 10px 10px
+    padding: 10px 10px;
+    overflow-y: scroll
+
 }
   
 #messages {
@@ -53,3 +55,4 @@ body {
   height: 20px;
   width: 100px;
 }
+.emoji { width: 2.0em; height: 2.0em; display: inline-block;  margin-top: -.25em;margin-bottom: -.25em; background-size: 1.5em; }
