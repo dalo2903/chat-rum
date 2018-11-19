@@ -7,7 +7,7 @@ class MessageController {
         return message
     }
     async getAllMessage () {
-        const messages = await Message.find().sort('-createdAt').exec()
+        const messages = await Message.find().sort('createdAt').exec()
         return messages
     }
 }
