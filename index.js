@@ -40,6 +40,10 @@ app.post("/login", async function(req, res) {
       }
     }
   }
+  else {
+    res.status(400);
+    res.redirect('/');
+  }
 });
 app.post("/register", async function(req, res) {
   console.log(req.body);
@@ -63,6 +67,10 @@ app.post("/register", async function(req, res) {
     // req.session.userId = user._id;
     res.status(200)
     return res.redirect('/');
+  }
+  else {
+    res.status(400);
+    res.redirect('/');
   }
 });
 app.get("/*", async function(req, res) {
