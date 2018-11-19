@@ -1,0 +1,33 @@
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+body {
+  font: 13px Helvetica, Arial;
+  background: #efefef;
+}
+.header {
+    background: white;
+    position: fixed;
+    top:0;
+    border-bottom: 1.5px solid deepskyblue ;
+    height: 16%;
+    padding: 10px 10px
+}
+  
+#messages {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+#messages li {
+  padding: 5px 10px;
+}
+#messages {
+  margin-bottom: 80px;
+}
+#m {
+  position: fixed;
+  bottom: 0;
+}

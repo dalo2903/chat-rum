@@ -1,0 +1,6 @@
+{
+    "django.i18n": false,
+    "django.snippets.use": false,
+    "files.associations": {"*.html":"html"}
+}
+

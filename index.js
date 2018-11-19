@@ -9,6 +9,13 @@ var MessageController = require('./controllers/MessageController')
 app.get('/',async function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
+app.get('/css/:css',async function(req, res){
+  res.sendFile(__dirname + '/css/'+req.params.css);
+});
+app.get('/javascript/:js',async function(req, res){
+  res.sendFile(__dirname + '/javascript/'+req.params.js);
+});
+
 
 io.on('connection',async function(socket){
   socket.on('chat message',async function(msg){
