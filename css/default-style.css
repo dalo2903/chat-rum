@@ -25,13 +25,30 @@ body {
   padding: 5px 10px;
 }
 #messages {
-  margin-bottom: 80px;
+  margin-bottom: 120px;
 }
-#m {
-  position: fixed;
-  bottom: 0;
-}
+
 #chat-form {
   padding: 0px;
   margin-left: 2px;
+  margin-bottom: 0px;
+}
+#chat-form {
+  position: fixed;
+  bottom: 0;
+}
+#m{
+  height: 100px;
+}
+#name{
+  text-decoration: underline
+}
+#time{
+  color: gray;
+  text-decoration: none;
+}
+
+#username {
+  height: 20px;
+  width: 100px;
 }

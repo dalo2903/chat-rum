@@ -7,7 +7,8 @@ $(function() {
   }
   $("form").submit(function() {
     var message = {
-      text: $("#m").val()
+      text: $("#m").val().trim(),
+      name: $("#username").val().trim(),
     };
     socket.emit("chat message", message);
     $("#m").val("");
@@ -15,7 +16,12 @@ $(function() {
     return false;
   });
   socket.on("chat message", function(message) {
-    $("#messages").append($("<li>").text(message.text));
+    console.log(message)
+    var date = new Date(message.createdAt)
+    message.time = "(" + date.getHours()+":"+ date.getMinutes()+ ")"
+
+    $("#messages").append($("<li>").html("<span id=\"name\">"+message.author.name+"</span>"+"<span id=\"time\"> "+message.time+"</span>:"));
+    $("#messages").append($("<li id=\"text\">").text(message.text))
     window.scrollTo(0, document.body.scrollHeight);
   });
   $("#m").keypress(function (e) {
