@@ -83,9 +83,9 @@ app.get("/*", async function(req, res) {
       // httpOnly: true, // The cookie only accessible by the web server
       // signed: true // Indicates if the cookie should be signed
     }
-    res.cookie('name', user.name, options);
-    res.cookie('username', user.username, options);
-    res.cookie('userid', unescape(user._id), options);
+    res.cookie('name', decodeURIComponent(user.name), options);
+    res.cookie('username', decodeURIComponent(user.username), options);
+    res.cookie('userid', decodeURIComponent(user._id), options);
 
     
     res.sendFile(__dirname + "/html/index.html");
@@ -99,13 +99,13 @@ io.on("connection", async function(socket) {
     var message = {
       text: msg.text.trim(),
       author:{
-        name:decodeURI(msg.name.trim()),
+        name:decodeURIComponent(msg.name).trim(),
         username: msg.username.trim(),
       }
     };
     var obj = {
       text: msg.text.trim(),
-      author: decodeURI(msg.userid.trim())
+      author: decodeURIComponent(msg.userid).trim()
     }
     var createdMessage
     if (message.text != ""){

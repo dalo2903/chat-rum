@@ -18,9 +18,9 @@ $(function() {
   $("form").submit(function() {
     var message = {
       text: $("#m").val().trim(),
-      username: getCookie('username'),
-      name: decodeURI(getCookie('name')),
-      userid: decodeURI(getCookie('userid'))
+      username: decodeURIComponent(getCookie('username')),
+      name: decodeURIComponent(getCookie('name')),
+      userid: decodeURIComponent(getCookie('userid'))
     };
     socket.emit("chat message", message);
     $("#m").val("");
