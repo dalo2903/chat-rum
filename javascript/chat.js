@@ -132,13 +132,13 @@ $(function() {
         i++;
     }
     if(userList.length === 0){
-      $("#users").val("");
+      $("#users").html("")
       userList.push(user);
       for (let user of userList)
         $("#users").append($("<li>").text(user.username));
     }
     else if(i < userList.length){
-      $("#users").val("");
+      $("#users").html("")
       userList.push(user);
       for (let user of userList)
         $("#users").append($("<li>").text(user.username));
@@ -162,7 +162,7 @@ $(function() {
           userList.splice(i,1)
       }
     }    
-    $("#users").val("");
+    $("#users").html("")
     for (let user of userList)
       $("#users").append($("<li>").text(user.username));
   });
