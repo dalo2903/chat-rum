@@ -3,10 +3,11 @@ var http = require("http").Server(app);
 var io = require("socket.io")(http);
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
-var session = require('express-session');
 
 var port = process.env.PORT || 3000;
 require("./database/loadModelMongoose");
+var RedisStore = require('./database/connectRedis').RedisStore;
+var session = require('./database/connectRedis').session;
 
 var MessageController = require("./controllers/MessageController");
 var UserController = require("./controllers/UserController");
@@ -14,6 +15,7 @@ var UserController = require("./controllers/UserController");
 // use sessions for tracking logins
 app.use(session({
   secret: 'work hard',
+  store: RedisStore,
   resave: true,
   saveUninitialized: false
 }));
@@ -31,6 +33,12 @@ app.get("/javascript/:js", async function(req, res) {
 app.get("/public/images/emoji/:file", async function(req, res) {
   res.sendFile(__dirname + "/public/images/emoji/" + req.params.file);
 });
+
+// app.get("/all", async function(req, res) {
+//   RedisStore.all(function(err, sessions){
+//     return res.send(sessions)
+//   });
+// });
 
 app.post("/login", async function(req, res) {
   console.log(req.body);

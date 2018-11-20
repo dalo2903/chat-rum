@@ -46,13 +46,16 @@ $(function() {
     console.log("message")
     return false;
   });
+  var lastUsername = ""
   socket.on("chat message", function(message) {
     console.log(message)
     var date = new Date(message.createdAt)
     message.time = "(" + date.getHours()+":"+ date.getMinutes()+ ")"
-
-    $("#messages").append($("<li>").html("<span id=\"name\">"+decodeURI(message.author.name) + " ("+message.author.username+ ")"+ "</span>"+"<span id=\"time\"> "+message.time+"</span>:"));
+    if (lastUsername !==  message.author.username){
+      $("#messages").append($("<li>").html("<span id=\"name\">"+decodeURI(message.author.name) + " ("+message.author.username+ ")"+ "</span>"+"<span id=\"time\"> "+message.time+"</span>:"));
+    }
     $("#messages").append($("<li id=\"text\">").html(message.text.linkify()))
+    lastUsername = message.author.username
     emojify.run();
     window.scrollTo(0, document.body.scrollHeight);
   });
