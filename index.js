@@ -132,6 +132,7 @@ io.on("connection", async function(socket) {
       var date = new Date();
       message.createdAt = date;
     }
+    message.isNew = true;
     io.emit("chat message", message);
 
     //console.log(message)
@@ -141,6 +142,7 @@ io.on("connection", async function(socket) {
 
     for (var m of messages) {
       // console.log(m)
+      m.isNew = false;
       io.emit("chat message", m);
       //console.log(m)
       //  console.log(m.time)

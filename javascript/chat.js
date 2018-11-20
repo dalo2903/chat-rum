@@ -1,4 +1,32 @@
+function notify(message) {
+  // Let's check if the browser supports notifications
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+
+  // Let's check whether notification permissions have already been granted
+  else if (Notification.permission === "granted") {
+    // If it's okay let's create a notification
+    var notification = new Notification(message);
+  }
+
+  // Otherwise, we need to ask the user for permission
+  else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then(function (permission) {
+      // If the user accepts, let's create a notification
+      if (permission === "granted") {
+        var notification = new Notification(message);
+      }
+    });
+  }
+  
+
+  // At last, if the user has denied notifications, and you 
+  // want to be respectful there is no need to bother them any more.
+}
+
 var init = true;
+
 if (!String.linkify) {
   String.prototype.linkify = function() {
     // http://, https://, ftp://
@@ -50,7 +78,7 @@ $(function() {
   socket.on("chat message", function(message) {
     console.log(message);
     var date = new Date(message.createdAt);
-    message.time = "(" + date.getHours() + ":" + date.getMinutes() + ")";
+    message.time = "(" + date.getHours() + ":" + (date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes()) + ")";
     if (lastUsername !== message.author.username) {
       $("#messages").append(
         $("<li>").html(
@@ -69,6 +97,8 @@ $(function() {
     $("#messages").append($('<li id="text">').html(message.text.linkify()));
     lastUsername = message.author.username;
     emojify.run();
+    if(message.isNew === true)
+      notify(message.text)
     window.scrollTo(0, document.body.scrollHeight);
   });
   $("#m").keypress(function(e) {
