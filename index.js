@@ -34,11 +34,11 @@ app.get("/public/images/emoji/:file", async function(req, res) {
   res.sendFile(__dirname + "/public/images/emoji/" + req.params.file);
 });
 
-// app.get("/all", async function(req, res) {
-//   RedisStore.all(function(err, sessions){
-//     return res.send(sessions)
-//   });
-// });
+app.get("/all", async function(req, res) {
+  RedisStore.all(function(err, sessions){
+    return res.send(sessions)
+  });
+});
 
 app.post("/login", async function(req, res) {
   console.log(req.body);
