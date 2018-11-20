@@ -137,7 +137,7 @@ $(function() {
       for (let user of userList)
         $("#users").append($("<li>").text(user.username));
     }
-    else if(i < userList.length){
+    else if(i >= userList.length){
       $("#users").html("")
       userList.push(user);
       for (let user of userList)
