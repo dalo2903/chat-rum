@@ -1,4 +1,4 @@
-function notify(message) {
+function notify(title, options) {
   // Let's check if the browser supports notifications
   if (!("Notification" in window)) {
     alert("This browser does not support desktop notification");
@@ -7,15 +7,15 @@ function notify(message) {
   // Let's check whether notification permissions have already been granted
   else if (Notification.permission === "granted") {
     // If it's okay let's create a notification
-    var notification = new Notification(message);
+    var notification = new Notification(title,options);
   }
-
   // Otherwise, we need to ask the user for permission
-  else if (Notification.permission !== "denied") {
+  else if (Notification.permission !== "granted") {
     Notification.requestPermission().then(function (permission) {
       // If the user accepts, let's create a notification
       if (permission === "granted") {
-        var notification = new Notification(message);
+          // Display pop-up if page is not hidden
+          var notification = new Notification(title,options);
       }
     });
   }
@@ -98,7 +98,15 @@ $(function() {
     lastUsername = message.author.username;
     emojify.run();
     if(message.isNew === true)
-      notify(message.text)
+    var hidden = ifvisible.now('hidden')
+      if(hidden){
+        const title = 'New message from '+message.author.name ;
+        const options = {
+          body: message.text,
+          icon: '/public/images/emoji/clep.gif'
+        };
+        notify(title, options)
+      }
     window.scrollTo(0, document.body.scrollHeight);
   });
   $("#m").keypress(function(e) {
