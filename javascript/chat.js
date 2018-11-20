@@ -7,21 +7,20 @@ function notify(title, options) {
   // Let's check whether notification permissions have already been granted
   else if (Notification.permission === "granted") {
     // If it's okay let's create a notification
-    var notification = new Notification(title,options);
+    var notification = new Notification(title, options);
   }
   // Otherwise, we need to ask the user for permission
   else if (Notification.permission !== "granted") {
-    Notification.requestPermission().then(function (permission) {
+    Notification.requestPermission().then(function(permission) {
       // If the user accepts, let's create a notification
       if (permission === "granted") {
-          // Display pop-up if page is not hidden
-          var notification = new Notification(title,options);
+        // Display pop-up if page is not hidden
+        var notification = new Notification(title, options);
       }
     });
   }
-  
 
-  // At last, if the user has denied notifications, and you 
+  // At last, if the user has denied notifications, and you
   // want to be respectful there is no need to bother them any more.
 }
 
@@ -56,10 +55,17 @@ function getCookie(name) {
 $(function() {
   emojify.setConfig({ img_dir: "public/images/emoji" });
   var socket = io();
-  if (init === true) {
-    socket.emit("init", "init");
-    init = false;
-  }
+  socket.emit("init", "init");
+  var userList = [];
+
+  var user = {
+    username: decodeURIComponent(getCookie("username")),
+    name: decodeURIComponent(getCookie("name")),
+    userid: decodeURIComponent(getCookie("userid"))
+  };
+
+  socket.emit("user connect", user);
+
   $("form").submit(function() {
     var message = {
       text: $("#m")
@@ -78,7 +84,12 @@ $(function() {
   socket.on("chat message", function(message) {
     console.log(message);
     var date = new Date(message.createdAt);
-    message.time = "(" + date.getHours() + ":" + (date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes()) + ")";
+    message.time =
+      "(" +
+      date.getHours() +
+      ":" +
+      (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
+      ")";
     if (lastUsername !== message.author.username) {
       $("#messages").append(
         $("<li>").html(
@@ -94,21 +105,68 @@ $(function() {
         )
       );
     }
+
     $("#messages").append($('<li id="text">').html(message.text.linkify()));
     lastUsername = message.author.username;
     emojify.run();
-    if(message.isNew === true)
-    var hidden = ifvisible.now('hidden')
-      if(hidden){
-        const title = 'New message from '+message.author.name ;
-        const options = {
-          body: message.text,
-          icon: '/public/images/emoji/clep.gif'
-        };
-        notify(title, options)
-      }
+    if (message.isNew === true) {
+      socket.emit("user connect", user);
+      var hidden = ifvisible.now("hidden");
+
+    }
+    if (hidden) {
+      const title = "New message from " + message.author.name;
+      const options = {
+        body: message.text,
+        icon: "/public/images/emoji/clep.gif"
+      };
+      notify(title, options);
+    }
     window.scrollTo(0, document.body.scrollHeight);
   });
+  socket.on("user connect", function(user) {
+    console.log(user)
+    var i = 0;
+    for (let _user of userList){
+      if(_user.userid === user.userid)
+        i++;
+    }
+    if(userList.length === 0){
+      $("#users").val("");
+      userList.push(user);
+      for (let user of userList)
+        $("#users").append($("<li>").text(user.username));
+    }
+    else if(i < userList.length){
+      $("#users").val("");
+      userList.push(user);
+      for (let user of userList)
+        $("#users").append($("<li>").text(user.username));
+    }
+  });
+  $(window).on("beforeunload", function() {
+    var user = {
+      username: decodeURIComponent(getCookie("username")),
+      name: decodeURIComponent(getCookie("name")),
+      userid: decodeURIComponent(getCookie("userid"))
+    };
+    socket.emit("user disconnect", user);
+  });
+  socket.on("user disconnect",function(user) {
+    console.log(user)
+
+    for (let _user of userList){
+      if (_user.userid === user.userid){
+        let i = userList.indexOf(_user)
+        if(i > -1)
+          userList.splice(i,1)
+      }
+    }    
+    $("#users").val("");
+    for (let user of userList)
+      $("#users").append($("<li>").text(user.username));
+  });
+
   $("#m").keypress(function(e) {
     if (e.which == 13 && !e.shiftKey) {
       $(this)
@@ -118,12 +176,10 @@ $(function() {
       return false;
     }
   });
-  $.get("/all")
-    .done(function(data) {
-      for(let d of data){
+  // $.get("/all")
+  //   .done(function(data) {
+  //     for(let d of data){
 
-        $("#users").append($("<li>").text(d.username))
-
-      }
-    })
+  //     }
+  //   })
 });

@@ -139,7 +139,7 @@ io.on("connection", async function(socket) {
   });
   socket.on("init", async function(msg) {
     var messages = await MessageController.getAllMessage();
-
+    console.log(msg)
     for (var m of messages) {
       // console.log(m)
       m.isNew = false;
@@ -148,7 +148,17 @@ io.on("connection", async function(socket) {
       //  console.log(m.time)
     }
   });
+  socket.on("user connect", async function(msg) {
+      console.log(msg)
+      io.emit("user connect", msg);
+  });
+  socket.on("user disconnect", async function(msg) {
+    console.log(msg)
+
+    io.emit("user disconnect", msg);
+  });
 });
+
 
 http.listen(port, function() {
   console.log("listening on *:" + port);
