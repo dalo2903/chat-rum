@@ -128,7 +128,7 @@ $(function() {
     console.log(user)
     var i = 0;
     for (let _user of userList){
-      if(_user.userid === user.userid)
+      if(_user.userid !== user.userid)
         i++;
     }
     if(userList.length === 0){
