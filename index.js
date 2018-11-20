@@ -35,8 +35,13 @@ app.get("/public/images/emoji/:file", async function(req, res) {
 });
 
 app.get("/all", async function(req, res) {
-  RedisStore.all(function(err, sessions){
-    return res.send(sessions)
+  RedisStore.all(async function(err, sessions){
+    var users = []
+    for (let s of sessions){
+      let user = await UserController.getUserById(s.userId);
+      users.push(user)
+    }
+    return res.send(users)
   });
 });
 

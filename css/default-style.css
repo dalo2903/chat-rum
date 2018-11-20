@@ -3,6 +3,9 @@
   padding: 0;
   box-sizing: border-box;
 } */
+body, html {
+  height: 100%;
+}
 body {
   font: 13px Helvetica, Arial;
   background: #efefef;
@@ -13,10 +16,20 @@ body {
     position: fixed;
     top:0;
     border-bottom: 1.5px solid deepskyblue ;
-    height: 16%;
+    height: 120px;
     padding: 10px 10px;
-    overflow-y: scroll
-
+    overflow-y: scroll;
+    z-index: 1000
+}
+#fixed-top{
+  top: auto;
+  position: fixed;
+  width: auto;
+  height: inherit;
+}
+#users{
+  background: white;
+  border: 1.5px solid deepskyblue ;
 }
   
 #messages {
