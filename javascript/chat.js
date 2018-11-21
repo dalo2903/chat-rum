@@ -142,7 +142,7 @@ $(function() {
     $("#picker").html("");
     for (let emoji of emojis){
       var code = emoji.split('.')[0]
-      var html = `<img align='absmiddle' alt=':${code}:' class='emoji' src='public/images/emoji/${emoji}' title='${code}'>`
+      var html = `<img align='absmiddle' alt=':${code}:' class='emoji' src='public/images/emoji/${emoji}' title='${code}'> ${code}`
       $("#picker").append($(`<option data-content="${html}">`).val(":"+code+":"));
     }
     $('#picker').selectpicker();
