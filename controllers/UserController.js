@@ -14,6 +14,15 @@ class UserController {
         const user = await User.findById(_id)
         return user
     }
+    async setUserDecoration (_id, attribute, value) {
+        var user = await User.findById(_id)
+        user.decorations.push({
+            attribute: attribute,
+            value: value
+        })
+        user.save()
+        return user
+    }
 
 }
 module.exports = new UserController()

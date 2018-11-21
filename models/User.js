@@ -14,6 +14,16 @@ const UserSchema = new Schema({
     type: String,
     default: ''
   },
+  decorations:[{
+    attribute:{
+      type: String,
+      default: ''
+    },
+    value:{
+      type: String,
+      default: ''
+    } 
+  }],
   // email:{
   //   type: String,
   //   default: ''

@@ -27,9 +27,10 @@ body {
   width: auto;
   height: inherit;
 }
-#users{
+#user-list{
+  padding-top: 20px;
   background: white;
-  border: 1.5px solid deepskyblue ;
+  border-right: 1.5px solid deepskyblue ;
 }
   
 #messages {
@@ -43,7 +44,9 @@ body {
 #messages {
   margin-bottom: 120px;
 }
-
+#user {
+  list-style-type: none;
+}
 #chat-form {
   padding: 0px;
   margin-left: 2px;

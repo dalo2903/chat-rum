@@ -6,19 +6,21 @@ var bodyParser = require("body-parser");
 
 var port = process.env.PORT || 3000;
 require("./database/loadModelMongoose");
-var RedisStore = require('./database/connectRedis').RedisStore;
-var session = require('./database/connectRedis').session;
+var RedisStore = require("./database/connectRedis").RedisStore;
+var session = require("./database/connectRedis").session;
 
 var MessageController = require("./controllers/MessageController");
 var UserController = require("./controllers/UserController");
 
 // use sessions for tracking logins
-app.use(session({
-  secret: 'work hard',
-  store: RedisStore,
-  resave: true,
-  saveUninitialized: false
-}));
+app.use(
+  session({
+    secret: "work hard",
+    store: RedisStore,
+    resave: true,
+    saveUninitialized: false
+  })
+);
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -35,37 +37,41 @@ app.get("/public/images/emoji/:file", async function(req, res) {
 });
 
 app.get("/all", async function(req, res) {
-  RedisStore.all(async function(err, sessions){
-    var users = []
-    for (let s of sessions){
+  RedisStore.all(async function(err, sessions) {
+    var users = [];
+    for (let s of sessions) {
       let user = await UserController.getUserById(s.userId);
-      users.push(user)
+      users.push(user);
     }
-    return res.send(users)
+    return res.send(users);
   });
 });
 
 app.post("/login", async function(req, res) {
   console.log(req.body);
-  if (req.body.username && req.body.password){
+  if (req.body.username && req.body.password) {
     var user = await UserController.getUserByUserName(req.body.username);
     if (user) {
       if (user.password === req.body.password) {
-          req.session.userId = user._id;
-          return res.redirect('/');
+        req.session.userId = user._id;
+        return res.redirect("/");
       }
     }
-  }
-  else {
+  } else {
     res.status(400);
-    res.redirect('/');
+    res.redirect("/");
   }
 });
 app.post("/register", async function(req, res) {
   console.log(req.body);
 
-  if (req.body.username && req.body.name && req.body.password && req.body['confirm-password']) {
-    if (req.body.password !== req.body['confirm-password']) {
+  if (
+    req.body.username &&
+    req.body.name &&
+    req.body.password &&
+    req.body["confirm-password"]
+  ) {
+    if (req.body.password !== req.body["confirm-password"]) {
       res.status(400);
       res.send();
     }
@@ -81,54 +87,48 @@ app.post("/register", async function(req, res) {
     };
     var userCreate = await UserController.createUser(obj);
     // req.session.userId = user._id;
-    res.status(200)
-    return res.redirect('/');
-  }
-  else {
+    res.status(200);
+    return res.redirect("/");
+  } else {
     res.status(400);
-    res.redirect('/');
+    res.redirect("/");
   }
 });
 app.get("/*", async function(req, res) {
   var user = await UserController.getUserById(req.session.userId);
-  if(!user)
-    res.sendFile(__dirname + "/html/registration.html");
+  if (!user) res.sendFile(__dirname + "/html/registration.html");
   else {
     let options = {
       maxAge: 1000 * 60 * 3600 // would expire after 15 minutes
       // httpOnly: true, // The cookie only accessible by the web server
       // signed: true // Indicates if the cookie should be signed
-    }
-    res.cookie('name', decodeURIComponent(user.name), options);
-    res.cookie('username', decodeURIComponent(user.username), options);
-    res.cookie('userid', decodeURIComponent(user._id), options);
+    };
+    res.cookie("name", decodeURIComponent(user.name), options);
+    res.cookie("username", decodeURIComponent(user.username), options);
+    res.cookie("userid", decodeURIComponent(user._id), options);
 
-    
     res.sendFile(__dirname + "/html/index.html");
   }
 });
-
-
+var userList = [];
 io.on("connection", async function(socket) {
   socket.on("chat message", async function(msg) {
-    
     var message = {
       text: msg.text.trim(),
-      author:{
-        name:decodeURIComponent(msg.name).trim(),
-        username: msg.username.trim(),
+      author: {
+        name: decodeURIComponent(msg.name).trim(),
+        username: msg.username.trim()
       }
     };
     var obj = {
       text: msg.text.trim(),
       author: decodeURIComponent(msg.userid).trim()
-    }
-    var createdMessage
-    if (message.text != ""){
+    };
+    var createdMessage;
+    if (message.text != "") {
       createdMessage = await MessageController.createMessage(obj);
       message.createdAt = createdMessage.createdAt;
-    }
-    else{
+    } else {
       var date = new Date();
       message.createdAt = date;
     }
@@ -139,7 +139,9 @@ io.on("connection", async function(socket) {
   });
   socket.on("init", async function(msg) {
     var messages = await MessageController.getAllMessage();
-    console.log(msg)
+    console.log(msg);
+    io.emit("user list", userList);
+
     for (var m of messages) {
       // console.log(m)
       m.isNew = false;
@@ -148,18 +150,32 @@ io.on("connection", async function(socket) {
       //  console.log(m.time)
     }
   });
-  socket.on("user connect", async function(msg) {
-      console.log(msg)
-      io.emit("user connect", msg);
+  socket.on("user connect", async function(user) {
+    console.log("user connect");
+    var i = 0;
+    for (let _user of userList) {
+      if (_user._id.toString() !== user.userid) i++;
+    }
+    if (i >= userList.length) {
+      userList.push(await UserController.getUserById(user.userid))
+      io.emit("user list", userList);
+    }
   });
-  socket.on("user disconnect", async function(msg) {
-    console.log(msg)
-
-    io.emit("user disconnect", msg);
+  socket.on("user disconnect", async function(user) {
+    console.log("user disconnect")
+    for (let _user of userList){
+      if (_user._id === user.userid){
+        let i = userList.indexOf(_user)
+        if(i > -1)
+          userList.splice(i,1)
+          io.emit("user list", userList);
+      }
+    }    
   });
 });
-
-
+setInterval(function(){
+  io.emit("user list", userList)
+},300*1000)
 http.listen(port, function() {
   console.log("listening on *:" + port);
 });

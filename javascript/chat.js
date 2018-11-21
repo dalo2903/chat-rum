@@ -3,7 +3,6 @@ function notify(title, options) {
   if (!("Notification" in window)) {
     alert("This browser does not support desktop notification");
   }
-
   // Let's check whether notification permissions have already been granted
   else if (Notification.permission === "granted") {
     // If it's okay let's create a notification
@@ -19,7 +18,6 @@ function notify(title, options) {
       }
     });
   }
-
   // At last, if the user has denied notifications, and you
   // want to be respectful there is no need to bother them any more.
 }
@@ -86,7 +84,7 @@ $(function() {
     var date = new Date(message.createdAt);
     message.time =
       "(" +
-      date.getHours() +
+      (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) +
       ":" +
       (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
       ")";
@@ -110,9 +108,7 @@ $(function() {
     lastUsername = message.author.username;
     emojify.run();
     if (message.isNew === true) {
-      socket.emit("user connect", user);
       var hidden = ifvisible.now("hidden");
-
     }
     if (hidden) {
       const title = "New message from " + message.author.name;
@@ -124,24 +120,15 @@ $(function() {
     }
     window.scrollTo(0, document.body.scrollHeight);
   });
-  socket.on("user connect", function(user) {
-    console.log(user)
-    var i = 0;
-    for (let _user of userList){
-      if(_user.userid !== user.userid)
-        i++;
-    }
-    if(userList.length === 0){
-      $("#users").html("")
-      userList.push(user);
-      for (let user of userList)
-        $("#users").append($("<li>").text(user.username));
-    }
-    else if(i >= userList.length){
-      $("#users").html("")
-      userList.push(user);
-      for (let user of userList)
-        $("#users").append($("<li>").text(user.username));
+  socket.on("user list", function(users) {
+    console.log(users);
+    $("#users").html("");
+    for (let user of users){
+      var decorations = {}
+      for(let d of user.decorations){
+        decorations[d.attribute] = d.value
+      }
+      $("#users").append($("<li id=\"user\">").css(decorations).html('<i class="fas fa-user"></i> ' + user.username));
     }
   });
   $(window).on("beforeunload", function() {
@@ -151,20 +138,6 @@ $(function() {
       userid: decodeURIComponent(getCookie("userid"))
     };
     socket.emit("user disconnect", user);
-  });
-  socket.on("user disconnect",function(user) {
-    console.log(user)
-
-    for (let _user of userList){
-      if (_user.userid === user.userid){
-        let i = userList.indexOf(_user)
-        if(i > -1)
-          userList.splice(i,1)
-      }
-    }    
-    $("#users").html("")
-    for (let user of userList)
-      $("#users").append($("<li>").text(user.username));
   });
 
   $("#m").keypress(function(e) {
@@ -176,10 +149,15 @@ $(function() {
       return false;
     }
   });
-  // $.get("/all")
-  //   .done(function(data) {
-  //     for(let d of data){
-
-  //     }
-  //   })
+  ifvisible.on("blur", function(){
+    // socket.emit("user disconnect", user)
+  });
+  ifvisible.on("focus", function(){
+    socket.emit("user connect", user)
+  });
+  ifvisible.setIdleDuration(300)
+  ifvisible.on("idle", function(){
+    socket.emit("user disconnect", user)
+    lastUsername = ""    
+  });
 });
