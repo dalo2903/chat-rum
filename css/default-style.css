@@ -11,6 +11,17 @@ body {
   background: #efefef;
   padding-top:120px;
 }
+#picker{
+  position: fixed;
+  left:0;
+  bottom: 120px
+}
+.bootstrap-select {
+  left: 0;
+  position: fixed;
+  bottom:0px;
+  z-index: 1000;
+}
 .header {
     background: white;
     position: fixed;

@@ -2,14 +2,15 @@
 <html>
   <head>
     <title>Chat Rum!</title>
-
+    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="../javascript/chat.js"></script>
     <script src="../javascript/bootstrap.min.js"></script>
     <script src="../javascript/emojify.js"></script>
     <script src="../javascript/ifvisible.js"></script>
-
+    <script src="../javascript/bootstrap-select.js"></script>
+  
 
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/emojify.js/1.1.0/css/basic/emojify.min.css" />
@@ -22,6 +23,7 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" type="text/css" href="css/default-style.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-select.css" />
 
   </head>
   <body>
@@ -38,6 +40,10 @@
       </div>
       <div class="col-sm-10"><ul id="messages"></ul></div>
     </div>
+    <select title=":)" class="selectpicker" id = "picker">
+        <option>Emoji...</option>
+    </select>
+
     <div class="container-fluid" id="chat-form">
       <form action="">
           <textarea class="form-control" id="m"></textarea>

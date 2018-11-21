@@ -40,14 +40,10 @@ app.get("/public/sound/:file", async function(req, res) {
 });
 
 app.get("/all", async function(req, res) {
-  RedisStore.all(async function(err, sessions) {
-    var users = [];
-    for (let s of sessions) {
-      let user = await UserController.getUserById(s.userId);
-      users.push(user);
-    }
-    return res.send(users);
-  });
+  var fs = require('fs');
+  var files = fs.readdirSync(__dirname + '/public/images/emoji/');
+  return res.send(files)
+  console.log(files)
 });
 
 app.post("/login", async function(req, res) {
@@ -147,6 +143,10 @@ io.on("connection", async function(socket) {
   socket.on("init", async function(msg) {
     var messages = await MessageController.getAllMessage();
     console.log(msg);
+    var fs = require('fs');
+    var files = fs.readdirSync(__dirname + '/public/images/emoji/');
+    io.emit("emoji list", files);
+    console.log(files)
     io.emit("user list", userList);
 
     for (var m of messages) {

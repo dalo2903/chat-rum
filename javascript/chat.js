@@ -138,8 +138,21 @@ $(function() {
       $("#users").append($("<li id=\"user\">").css(decorations).html('<i class="fas fa-user"></i> ' + user.username));
     }
   });
+  socket.on("emoji list", function(emojis) {
+    $("#picker").html("");
+    for (let emoji of emojis){
+      var code = emoji.split('.')[0]
+      $("#picker").append($("<option>").val(":"+code+":").text(":"+code+":")).selectpicker('refresh');
+    }
+    emojify.rum()
+  });
+  $("#picker").on('change', function(e){
+    // $("#m").append(this.value)
+    var txt = $.trim(this.value);
+    var box = $("#m");
+    box.val(box.val() + txt);
+  })
   $(window).on("beforeunload", function() {
-    
     socket.emit("user disconnect", user);
   });
 
