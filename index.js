@@ -35,6 +35,9 @@ app.get("/javascript/:js", async function(req, res) {
 app.get("/public/images/emoji/:file", async function(req, res) {
   res.sendFile(__dirname + "/public/images/emoji/" + req.params.file);
 });
+app.get("/public/sound/:file", async function(req, res) {
+  res.sendFile(__dirname + "/public/sound/" + req.params.file);
+});
 
 app.get("/all", async function(req, res) {
   RedisStore.all(async function(err, sessions) {
@@ -162,7 +165,7 @@ io.on("connection", async function(socket) {
     }
     if (i >= userList.length) {
       userList.push(await UserController.getUserById(user.userid))
-      console.log(userList)
+      // console.log(userList)
       io.emit("user list", userList);
     }
   });
@@ -173,7 +176,7 @@ io.on("connection", async function(socket) {
         let i = userList.indexOf(_user)
         if(i > -1)
           userList.splice(i,1)
-          console.log(userList)
+          // console.log(userList)
           io.emit("user list", userList);
       }
     }    

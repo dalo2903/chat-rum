@@ -1,3 +1,8 @@
+function playSound(){
+  var mp3Source = '<source src="/public/sound/join.wav" type="audio/wav">';
+ 
+  $("#sound").html('<audio autoplay="autoplay">' + mp3Source + '</audio>');
+}
 function notify(title, options) {
   // Let's check if the browser supports notifications
   if (!("Notification" in window)) {
@@ -18,6 +23,7 @@ function notify(title, options) {
       }
     });
   }
+ 
   // At last, if the user has denied notifications, and you
   // want to be respectful there is no need to bother them any more.
 }
@@ -122,6 +128,7 @@ $(function() {
   });
   socket.on("user list", function(users) {
     console.log(users);
+    playSound()
     $("#users").html("");
     for (let user of users){
       var decorations = {}
