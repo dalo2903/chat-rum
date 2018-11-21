@@ -150,7 +150,7 @@ $(function() {
     }
   });
   ifvisible.on("blur", function(){
-    // socket.emit("user disconnect", user)
+    socket.emit("user disconnect", user)
   });
   ifvisible.on("focus", function(){
     socket.emit("user connect", user)

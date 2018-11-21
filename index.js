@@ -56,6 +56,10 @@ app.post("/login", async function(req, res) {
         req.session.userId = user._id;
         return res.redirect("/");
       }
+      else{
+        res.status(400);
+        res.redirect("/");
+      }
     }
   } else {
     res.status(400);
