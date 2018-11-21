@@ -165,7 +165,7 @@ io.on("connection", async function(socket) {
     }
     if (i >= userList.length) {
       var _user = await UserController.getUserById(user.userid)
-      _user.time = user.time
+      _user.time = Date.now()
       userList.push(_user)
       // console.log(userList)
       io.emit("user list", userList);
