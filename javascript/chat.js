@@ -80,6 +80,8 @@ $(function() {
       userid: decodeURIComponent(getCookie("userid"))
     };
     socket.emit("chat message", message);
+    socket.emit("user connect", user)
+
     $("#m").val("");
     console.log("message");
     return false;
