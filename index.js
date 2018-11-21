@@ -162,16 +162,18 @@ io.on("connection", async function(socket) {
     }
     if (i >= userList.length) {
       userList.push(await UserController.getUserById(user.userid))
+      console.log(userList)
       io.emit("user list", userList);
     }
   });
   socket.on("user disconnect", async function(user) {
     console.log("user disconnect")
     for (let _user of userList){
-      if (_user._id === user.userid){
+      if (_user._id.toString() === user.userid){
         let i = userList.indexOf(_user)
         if(i > -1)
           userList.splice(i,1)
+          console.log(userList)
           io.emit("user list", userList);
       }
     }    
