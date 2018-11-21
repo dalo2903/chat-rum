@@ -50,7 +50,7 @@
          /* X-D  */ stuck_out_tongue_closed_eyes: /x-d/gi,
          /* ;-p  */ stuck_out_tongue_winking_eye: /[:;]-?p/gi,
    /* :-[ / :-@  */ rage: /:-?[\[@]/g,
-         /* :-(  */ frowning: /:-?\(/g,
+         /* :-(  */ sed: /:-?\(/g,
          /* :'-( */ sob: /:['’]-?\(|:&#x27;\(/g,
          /* :-*  */ kissing_heart: /:-?\*/g,
          /* ;-)  */ wink: /;-?\)/g,

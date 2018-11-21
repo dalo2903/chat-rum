@@ -139,11 +139,7 @@ $(function() {
     }
   });
   $(window).on("beforeunload", function() {
-    var user = {
-      username: decodeURIComponent(getCookie("username")),
-      name: decodeURIComponent(getCookie("name")),
-      userid: decodeURIComponent(getCookie("userid"))
-    };
+    
     socket.emit("user disconnect", user);
   });
 
@@ -162,9 +158,9 @@ $(function() {
   ifvisible.on("focus", function(){
     socket.emit("user connect", user)
   });
-  ifvisible.setIdleDuration(300)
+  // ifvisible.setIdleDuration(300)
   ifvisible.on("idle", function(){
-    socket.emit("user disconnect", user)
+    // socket.emit("user disconnect", user)
     lastUsername = ""    
   });
 });
