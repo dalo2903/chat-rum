@@ -11,11 +11,11 @@ body {
   background: #efefef;
   padding-top:120px;
 }
-#picker{
+/* #picker{
   position: fixed;
   left:0;
   bottom: 120px
-}
+} */
 .bootstrap-select {
   left: 0;
   position: fixed;

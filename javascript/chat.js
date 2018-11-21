@@ -142,8 +142,11 @@ $(function() {
     $("#picker").html("");
     for (let emoji of emojis){
       var code = emoji.split('.')[0]
-      $("#picker").append($("<option>").attr('data-thumbnail','http://icons.iconarchive.com/icons/tinylab/android-lollipop-apps/24/Foursquare-icon.png').val(":"+code+":").text(":"+code+":")).selectpicker('refresh');
+      var html = `<img align='absmiddle' alt=':${code}:' class='emoji' src='public/images/emoji/${emoji}' title='${code}'>`
+      $("#picker").append($(`<option data-content="${html}">`).val(":"+code+":"));
     }
+    $('#picker').selectpicker();
+
   });
   $("#picker").on('change', function(e){
     // $("#m").append(this.value)
