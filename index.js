@@ -185,7 +185,7 @@ io.on("connection", async function(socket) {
   });
 });
 setInterval(function(){
-  for (let _user of usetList){
+  for (let _user of userList){
     if(Date.now() - _user.time > 300*1000 ){
       let i = userList.indexOf(_user)
       if(i > -1)
