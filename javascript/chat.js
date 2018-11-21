@@ -65,7 +65,7 @@ $(function() {
   var user = {
     username: decodeURIComponent(getCookie("username")),
     name: decodeURIComponent(getCookie("name")),
-    userid: decodeURIComponent(getCookie("userid"))
+    userid: decodeURIComponent(getCookie("userid")),
   };
 
   socket.emit("user connect", user);
@@ -142,15 +142,15 @@ $(function() {
     $("#picker").html("");
     for (let emoji of emojis){
       var code = emoji.split('.')[0]
-      $("#picker").append($("<option>").val(":"+code+":").text(":"+code+":")).selectpicker('refresh');
+      $("#picker").append($("<option>").attr('data-thumbnail','http://icons.iconarchive.com/icons/tinylab/android-lollipop-apps/24/Foursquare-icon.png').val(":"+code+":").text(":"+code+":")).selectpicker('refresh');
     }
-    emojify.run()
   });
   $("#picker").on('change', function(e){
     // $("#m").append(this.value)
     var txt = $.trim(this.value);
     var box = $("#m");
     box.val(box.val() + txt);
+    $("#m").focus()
   })
   $(window).on("beforeunload", function() {
     socket.emit("user disconnect", user);

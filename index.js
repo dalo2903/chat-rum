@@ -164,7 +164,9 @@ io.on("connection", async function(socket) {
       if (_user._id.toString() !== user.userid) i++;
     }
     if (i >= userList.length) {
-      userList.push(await UserController.getUserById(user.userid))
+      var _user = await UserController.getUserById(user.userid)
+      _user.time = user.time
+      userList.push(_user)
       // console.log(userList)
       io.emit("user list", userList);
     }
@@ -183,6 +185,13 @@ io.on("connection", async function(socket) {
   });
 });
 setInterval(function(){
+  for (let _user of usetList){
+    if(Date.now() - _user.time > 300*1000 ){
+      let i = userList.indexOf(_user)
+      if(i > -1)
+        userList.splice(i,1)
+    }
+  }
   io.emit("user list", userList)
 },300*1000)
 http.listen(port, function() {
