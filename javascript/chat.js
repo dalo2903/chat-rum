@@ -144,7 +144,7 @@ $(function() {
       var code = emoji.split('.')[0]
       $("#picker").append($("<option>").val(":"+code+":").text(":"+code+":")).selectpicker('refresh');
     }
-    emojify.rum()
+    emojify.run()
   });
   $("#picker").on('change', function(e){
     // $("#m").append(this.value)
