@@ -40,10 +40,10 @@ app.get("/public/sound/:file", async function(req, res) {
 });
 
 app.get("/all", async function(req, res) {
-  var fs = require('fs');
-  var files = fs.readdirSync(__dirname + '/public/images/emoji/');
-  return res.send(files)
-  console.log(files)
+  var fs = require("fs");
+  var files = fs.readdirSync(__dirname + "/public/images/emoji/");
+  return res.send(files);
+  console.log(files);
 });
 
 app.post("/login", async function(req, res) {
@@ -54,8 +54,7 @@ app.post("/login", async function(req, res) {
       if (user.password === req.body.password) {
         req.session.userId = user._id;
         return res.redirect("/");
-      }
-      else{
+      } else {
         res.status(400);
         res.redirect("/");
       }
@@ -143,10 +142,10 @@ io.on("connection", async function(socket) {
   socket.on("init", async function(msg) {
     var messages = await MessageController.getAllMessage();
     console.log(msg);
-    var fs = require('fs');
-    var files = fs.readdirSync(__dirname + '/public/images/emoji/');
+    var fs = require("fs");
+    var files = fs.readdirSync(__dirname + "/public/images/emoji/");
     io.emit("emoji list", files);
-    console.log(files)
+    console.log(files);
     io.emit("user list", userList);
 
     for (var m of messages) {
@@ -164,36 +163,34 @@ io.on("connection", async function(socket) {
       if (_user._id.toString() !== user.userid) i++;
     }
     if (i >= userList.length) {
-      var _user = await UserController.getUserById(user.userid)
-      _user.time = Date.now()
-      userList.push(_user)
+      var _user = await UserController.getUserById(user.userid);
+      _user.time = Date.now();
+      userList.push(_user);
       // console.log(userList)
       io.emit("user list", userList);
     }
   });
   socket.on("user disconnect", async function(user) {
-    console.log("user disconnect")
-    for (let _user of userList){
-      if (_user._id.toString() === user.userid){
-        let i = userList.indexOf(_user)
-        if(i > -1)
-          userList.splice(i,1)
-          // console.log(userList)
-          io.emit("user list", userList);
+    console.log("user disconnect");
+    for (let _user of userList) {
+      if (_user._id.toString() === user.userid) {
+        let i = userList.indexOf(_user);
+        if (i > -1) userList.splice(i, 1);
+        // console.log(userList)
+        io.emit("user list", userList);
       }
-    }    
+    }
   });
 });
-setInterval(function(){
-  for (let _user of userList){
-    if(Date.now() - _user.time > 300*1000 ){
-      let i = userList.indexOf(_user)
-      if(i > -1)
-        userList.splice(i,1)
+setInterval(function() {
+  for (let _user of userList) {
+    if (Date.now() - _user.time > 300 * 1000 * 5) {
+      let i = userList.indexOf(_user);
+      if (i > -1) userList.splice(i, 1);
     }
   }
-  io.emit("user list", userList)
-},300*1000)
+  io.emit("user list", userList);
+}, 300 * 1000 * 5);
 http.listen(port, function() {
   console.log("listening on *:" + port);
 });
