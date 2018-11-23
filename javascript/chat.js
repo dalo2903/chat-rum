@@ -34,16 +34,18 @@ if (!String.linkify) {
   String.prototype.linkify = function() {
     // http://, https://, ftp://
     var urlPattern = /\b(?:https?|ftp):\/\/[a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|]/gim;
-
+    
+    var imgPattern = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|png)/gim;
     // www. sans http:// or https://
     var pseudoUrlPattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
 
     // Email addresses
     var emailAddressPattern = /[\w.]+@[a-zA-Z_-]+?(?:\.[a-zA-Z]{2,6})+/gim;
 
-    return this.replace(urlPattern, '<a href="$&">$&</a>')
-      .replace(pseudoUrlPattern, '$1<a href="http://$2">$2</a>')
-      .replace(emailAddressPattern, '<a href="mailto:$&">$&</a>');
+    return this.replace(imgPattern,'<a href="$&"><img src="$&"style="width:500px;height:auto;"></img></a>')
+          //.replace(urlPattern, '<a href="$&">$&</a>')
+          //.replace(pseudoUrlPattern, '$1<a href="http://$2">$2</a>')
+//.replace(emailAddressPattern, '<a href="mailto:$&">$&</a>')
   };
 }
 function getCookie(name) {
@@ -114,6 +116,7 @@ $(function() {
 
     $("#messages").append($('<li id="text">').html(message.text.linkify()));
     lastUsername = message.author.username;
+    
     emojify.run();
     if (message.isNew === true) {
       var hidden = ifvisible.now("hidden");
