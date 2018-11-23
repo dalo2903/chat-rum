@@ -147,8 +147,8 @@ $(function() {
       var html = `<img align='absmiddle' alt=':${code}:' class='emoji' src='public/images/emoji/${emoji}' title='${code}'> ${code}`
       $("#picker").append($(`<option data-content="${html}">`).val(":"+code+":"));
     }
+    emojify.setEmojis(emojis.map(e => e.split('.')[0]))
     $('#picker').selectpicker();
-
   });
   $("#picker").on('change', function(e){
     // $("#m").append(this.value)
